@@ -66,15 +66,15 @@ pub fn ecdsa_sign(hash: &[u8], private_key: &[u8]) -> [u8; 65] {
     let s = Secp256k1::signing_only();
     let msg = Message::from_slice(hash).unwrap();
     let key = SecretKey::from_slice(private_key).unwrap();
-    let res = s.sign_ecdsa_recoverable(&msg, &key);
+    // let res = s.sign_ecdsa_recoverable(&msg, &key);
     let (v, sig_bytes) = s.sign_ecdsa_recoverable(&msg, &key).serialize_compact();
-    let r = hex::encode(&sig_bytes[..32]);
-    let s = hex::encode(&sig_bytes[32..64]);
+    // let r = hex::encode(&sig_bytes[..32]);
+    // let s = hex::encode(&sig_bytes[32..64]);
 
     let mut vec = sig_bytes.to_vec();
     vec.push(v.to_i32() as u8);
 
-    let slice = vec.as_slice();
+    // let slice = vec.as_slice();
 
     let mut vec1 = sig_bytes[..32].to_vec();
     let mut vec2 = sig_bytes[32..].to_vec();

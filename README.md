@@ -15,16 +15,18 @@ This contract has the following functionality:
 ## Table of Contents
 
 1. [Getting Started](#getting-started)
+2. [Prerequisites](#prerequisites)
+3. [Cargo Commands](#cargo-commands)
 
-2. [Usage](#usage)
+4. [Usage](#usage)
 
-3. [Installing and Interacting with the Contract using the Rust Casper Client](#installing-and-interacting-with-the-contract-using-the-rust-casper-client)
+5. [Installing and Interacting with the Contract using the Rust Casper Client](#installing-and-interacting-with-the-contract-using-the-rust-casper-client)
 
-4. [Events](#events)
+6. [Events](#events)
 
-5. [Error Codes](#error-codes)
+7. [Error Codes](#error-codes)
 
-6. [Contributing](#contributing)
+8. [Contributing](#contributing)
 
 ## Getting Started
 
@@ -32,6 +34,93 @@ To get started with using the smart contracts in this repository, you will need 
 
 ```bash
 cargo install casper-client
+```
+#### Notes: 
+casper-client package cannot be installed inside the project root directory as a specific rustc version would be required.
+
+## Prerequisites
+You need to have a x86_64 CPU to build the code, as Casper dependencies for now don't support ARM (e.g. M1) architecture CPU's. It is recommended to use Linux, Debian-based distributions (e.g. Ubuntu 22.04).
+
+First, you need to install Rust:
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
+To check for successful installation, one needs to run this command:
+```bash
+rustup --version
+```
+
+Secondly, you need to install CMake:
+```bash
+sudo apt-get -y install cmake
+```
+To check for successful installation, one needs to run this command:
+```bash
+cmake --version
+```
+To install casper-client, to interact with the contract using the CLI you must install these dependencies:
+```bash
+brew install pkg-config
+brew install openssl
+brew install libssl-dev
+```
+Since, Clang is also required for linux. Check if you have the required clang compiler already installed: 
+```bash
+clang --version 
+```
+To install clang on your linux distro:
+```bash
+sudo apt install clang
+```
+
+## Cargo Commands
+```bash
+prepare:
+	rustup target add wasm32-unknown-unknown
+```
+```bash
+build-contract:
+	cd contract && cargo build --release --target wasm32-unknown-unknown
+	cd counter-call && cargo build --release --target wasm32-unknown-unknown
+	cd erc20/erc20-token && cargo build --release --target wasm32-unknown-unknown
+
+	wasm-strip contract/target/wasm32-unknown-unknown/release/bridge_pool.wasm 2>/dev/null | true
+	wasm-strip counter-call/target/wasm32-unknown-unknown/release/counter-call.wasm 2>/dev/null | true
+```
+```bash
+test-only:
+	cd tests && cargo test
+```
+```bash
+test: build-contract
+	mkdir -p tests/wasm
+	cp contract/target/wasm32-unknown-unknown/release/bridge_pool.wasm tests/wasm
+	cp counter-call/target/wasm32-unknown-unknown/release/counter-call.wasm tests/wasm
+	cp erc20/target/wasm32-unknown-unknown/release/erc20_token.wasm tests/wasm/erc20.wasm
+	cd tests && cargo test
+```
+```bash	
+clippy:
+	cd contract && cargo clippy --all-targets -- -D warnings
+```
+```bash
+check-lint: clippy
+	cd contract && cargo fmt -- --check
+	cd counter-call && cargo fmt -- --check
+	cd tests && cargo fmt -- --check
+```
+```bash
+lint: clippy
+	cd contract && cargo fmt
+	cd counter-call && cargo fmt
+	cd tests && cargo fmt
+```
+```bash
+clean:
+	cd contract && cargo clean
+	cd counter-call && cargo clean
+	cd tests && cargo clean
+	rm -rf tests/wasm
 ```
 
 ## Usage
@@ -53,7 +142,6 @@ make build-contract
 ```bash
 make test
 ```
-
 ### Installing and Interacting with the Contract using the Rust Casper Client
 
 

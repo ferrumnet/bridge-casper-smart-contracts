@@ -8,11 +8,12 @@ mod tests {
 
     use casper_engine_test_support::{
         ExecuteRequestBuilder, InMemoryWasmTestBuilder, WasmTestBuilder, DEFAULT_ACCOUNT_ADDR,
-        DEFAULT_RUN_GENESIS_REQUEST, PRODUCTION_RUN_GENESIS_REQUEST,
+        PRODUCTION_RUN_GENESIS_REQUEST,
     };
+
     use casper_types::{runtime_args, ContractHash, RuntimeArgs};
 
-    use std::collections::BTreeMap;
+    // use std::collections::BTreeMap;
 
     use blake2::{
         digest::{Update, VariableOutput},
@@ -20,23 +21,24 @@ mod tests {
     };
     use casper_execution_engine::storage::global_state::in_memory::InMemoryGlobalState;
     use casper_types::{
-        account::AccountHash,
-        bytesrepr::{FromBytes, ToBytes},
-        CLTyped, ContractPackageHash, Key, URef, BLAKE2B_DIGEST_LENGTH, U256,
+        ContractPackageHash, Key, BLAKE2B_DIGEST_LENGTH, U256, bytesrepr::{ToBytes}
     };
-    use test_env::TestEnv;
+    // use casper_types::{
+    //     URef, CLTyped, account::AccountHash
+    // };
+    // use test_env::TestEnv;
 
     const ERC20_WASM: &str = "erc20.wasm";
     const BRIDGE_POOL_WASM: &str = "bridge_pool.wasm"; // The main example contract
-    const COUNTER_CALL_WASM: &str = "counter-call.wasm"; // The session code that calls the contract
+    // const COUNTER_CALL_WASM: &str = "counter-call.wasm"; // The session code that calls the contract
     const ERC20_CONTRACT_NAME: &str = "erc20_token_contract";
     const ERC20_CONTRACT_PACKAGE_HASH: &str = "erc20-contract_package_hash";
     const BRIDGE_POOL_CONTRACT_HASH: &str = "bridge_pool_contract_hash";
     const BRIDGE_POOL_CONTRACT_PACKAGE_HASH: &str = "bridge_pool_package_name";
 
-    const CONTRACT_KEY: &str = "bridge_pool"; // Named key referencing this contract
-    const LIQUIDITY_KEY: &str = "liquidity"; // Named key referencing the count value
-    const CONTRACT_VERSION_KEY: &str = "version"; // Automatically incremented version in a contract package
+    // const CONTRACT_KEY: &str = "bridge_pool"; // Named key referencing this contract
+    // const LIQUIDITY_KEY: &str = "liquidity"; // Named key referencing the count value
+    // const CONTRACT_VERSION_KEY: &str = "version"; // Automatically incremented version in a contract package
     const ALLOWANCES_SEED_UREF: &str = "allowances";
 
     #[test]
@@ -550,11 +552,11 @@ mod tests {
 
         assert_eq!(actual_allowance, U256::from(10i64));
 
-        let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
+        // let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
 
-        let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
-        let bridge_pool_contract_package_hash_string =
-            bridge_pool_contract_package_hash.to_formatted_string();
+        // let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
+        // let bridge_pool_contract_package_hash_string =
+        //     bridge_pool_contract_package_hash.to_formatted_string();
         let add_signer_args = runtime_args! {
             "signer" => "cde782dee9643b02dde8a11499ede81ec1d05dd3".to_string() ,
         };
@@ -660,11 +662,11 @@ mod tests {
 
         assert_eq!(actual_allowance, U256::from(10i64));
 
-        let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
+        // let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
 
-        let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
-        let bridge_pool_contract_package_hash_string =
-            bridge_pool_contract_package_hash.to_formatted_string();
+        // let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
+        // let bridge_pool_contract_package_hash_string =
+        //     bridge_pool_contract_package_hash.to_formatted_string();
         let add_signer_args = runtime_args! {
             "signer" => "cde782dee9643b02dde8a11499ede81ec1d05dd3".to_string() ,
         };
@@ -938,7 +940,7 @@ mod tests {
     #[test]
     fn should_be_able_to_install_and_allow_target() {
         let mut builder = InMemoryWasmTestBuilder::default();
-        builder.run_genesis(&DEFAULT_RUN_GENESIS_REQUEST).commit();
+        builder.run_genesis(&PRODUCTION_RUN_GENESIS_REQUEST).commit();
 
         let erc20_runtime_args = runtime_args! {
             "name" => "FERRUM_ERC20".to_string(),
@@ -1023,11 +1025,11 @@ mod tests {
 
         assert_eq!(actual_allowance, U256::from(10i64));
 
-        let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
+        // let erc20_contract_package_hash = get_erc20_contract_package_hash(&builder);
 
-        let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
-        let bridge_pool_contract_package_hash_string =
-            bridge_pool_contract_package_hash.to_formatted_string();
+        // let erc20_contract_package_hash_string = erc20_contract_package_hash.to_formatted_string();
+        // let bridge_pool_contract_package_hash_string =
+        //     bridge_pool_contract_package_hash.to_formatted_string();
         let allow_target_args = runtime_args! {
             "token_address" => "contract-package-wasme222974816f70ca96fc4002a696bb552e2959d3463158cd82a7bfc8a94c03473".to_string() ,
             "token_name" => "some_unusual_token_name".to_string() ,
@@ -1369,7 +1371,7 @@ fn main() {
 
 pub fn signer_unique(message_hash: String, signature: Vec<u8>) -> Vec<u8> {
     let signature_rec = if signature.len() == 65 {
-        let mut signature_vec: Vec<u8> = signature;
+        let signature_vec: Vec<u8> = signature;
         RecoverableSignature::from_bytes(&signature_vec[..]).unwrap()
     } else {
         panic!();
