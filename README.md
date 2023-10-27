@@ -16,7 +16,7 @@ This contract has the following functionality:
 
 1. [Getting Started](#getting-started)
 2. [Prerequisites](#prerequisites)
-3. [Cargo Commands](#cargo-commands)
+3. [Makefile Commands](#makefile-commands)
 
 4. [Usage](#usage)
 
@@ -73,7 +73,12 @@ To install clang on your linux distro:
 sudo apt install clang
 ```
 
-## Cargo Commands
+## Makefile Commands
+For generating the cargo documentation:
+```bash
+Cargo doc
+``` 
+Make commands:
 ```bash
 prepare:
 	rustup target add wasm32-unknown-unknown
