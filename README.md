@@ -74,10 +74,19 @@ sudo apt install clang
 ```
 
 ## Makefile Commands
-For generating the cargo documentation:
+For generating the cargo documentation: 
+Change directory into contract directory by running
+
 ```bash
-Cargo doc
-``` 
+ cd contract
+```
+
+then run :
+
+```bash
+cargo doc
+```
+
 Make commands:
 ```bash
 prepare:
